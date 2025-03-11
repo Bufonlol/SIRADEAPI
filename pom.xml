@@ -14,8 +14,12 @@
 			<properties>
 				<spring.profiles.active>prod</spring.profiles.active>
 			</properties>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
 		</profile>
 	</profiles>
+
 	<groupId>com.sirade</groupId>
 	<artifactId>SIRADEAPI</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
