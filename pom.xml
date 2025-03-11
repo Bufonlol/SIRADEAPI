@@ -8,6 +8,14 @@
 		<version>3.4.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	<profiles>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<spring.profiles.active>prod</spring.profiles.active>
+			</properties>
+		</profile>
+	</profiles>
 	<groupId>com.sirade</groupId>
 	<artifactId>SIRADEAPI</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
