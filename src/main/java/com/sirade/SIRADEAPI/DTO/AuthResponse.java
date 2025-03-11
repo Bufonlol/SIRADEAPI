@@ -15,7 +15,6 @@ public class AuthResponse {
         this.rol = rol;
         this.nombreCompleto = nombreCompleto;
     }
-
     // Getters
     public String getToken() { return token; }
     public Long getUserId() { return userId; }
