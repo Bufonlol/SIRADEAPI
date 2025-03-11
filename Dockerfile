@@ -1,7 +1,7 @@
 FROM openjdk:19-jdk AS build
 WORKDIR /app
 
-# Configurar encoding UTF-8
+# Configurar locale y encoding
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
@@ -11,7 +11,7 @@ COPY mvnw .
 COPY .mvn .mvn
 
 RUN chmod +x ./mvnw
-# Ejecutar con encoding UTF-8 y actualizar plugin de recursos
+# Agregar parámetros de encoding y actualizar plugins
 RUN ./mvnw clean package -DskipTests -Dfile.encoding=UTF-8 -Dmaven.resources.plugin.version=3.3.1
 
 FROM openjdk:19-jdk
