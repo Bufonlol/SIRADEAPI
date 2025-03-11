@@ -7,6 +7,7 @@ COPY pom.xml .
 COPY src src
 RUN mvn clean package -Pprod -DskipTests
 
+
 # Etapa de empaquetado
 FROM openjdk:11-jdk-slim
 WORKDIR /app
