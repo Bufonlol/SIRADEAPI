@@ -3,8 +3,8 @@ package com.sirade.SIRADEAPI.DTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
@@ -16,6 +16,18 @@ public class Hospital {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank(message = "El nombre es obligatorio")
+    private String nombre;
+
+    @NotBlank(message = "La dirección es obligatoria")
+    private String direccion;
+
+    @NotBlank(message = "La ciudad es obligatoria")
+    private String ciudad;
+
+    @NotBlank(message = "El país es obligatorio")
+    private String pais;
 
     public Long getId() {
         return id;
@@ -81,37 +93,18 @@ public class Hospital {
         this.usuarios = usuarios;
     }
 
-    @NotBlank(message = "El nombre es obligatorio")
-    private String nombre;
-
-    @NotBlank(message = "La dirección es obligatoria")
-    private String direccion;
-
-    @NotBlank(message = "La ciudad es obligatoria")
-    private String ciudad;
-
-    @NotBlank(message = "El país es obligatorio")
-    private String pais;
-
     private String telefono;
     private String email;
 
     @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL)
+    @JsonManagedReference // Relaciona con @JsonBackReference en UsuarioDTO
+    @JsonIgnore // Alternativa: si NO quieres incluir la lista de usuarios en la respuesta del hospital
     private List<UsuarioDTO> usuarios;
 
     // Constructor vacío requerido por Jackson
     public Hospital() {}
 
-    // Constructor con parámetros para facilitar pruebas o creación de objetos
-    @JsonCreator
-    public Hospital(
-            @JsonProperty("nombre") String nombre,
-            @JsonProperty("direccion") String direccion,
-            @JsonProperty("ciudad") String ciudad,
-            @JsonProperty("pais") String pais,
-            @JsonProperty("telefono") String telefono,
-            @JsonProperty("email") String email
-    ) {
+    public Hospital(String nombre, String direccion, String ciudad, String pais, String telefono, String email) {
         this.nombre = nombre;
         this.direccion = direccion;
         this.ciudad = ciudad;

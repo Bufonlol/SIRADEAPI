@@ -1,4 +1,3 @@
-// 1. UsuarioDTO.java (mejorado)
 package com.sirade.SIRADEAPI.DTO;
 
 import lombok.Data;
@@ -6,6 +5,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.util.Collection;
 import java.util.List;
@@ -49,10 +50,8 @@ public class UsuarioDTO {
 
     @ManyToOne
     @JoinColumn(name = "hospital_id")
+    @JsonBackReference // Evita la serialización infinita
     private Hospital hospital;
-
-    @Transient
-    private Long hospitalId;
 
     public Long getId() {
         return id;
@@ -133,6 +132,9 @@ public class UsuarioDTO {
     public void setHospitalId(Long hospitalId) {
         this.hospitalId = hospitalId;
     }
+
+    @Transient
+    private Long hospitalId;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
