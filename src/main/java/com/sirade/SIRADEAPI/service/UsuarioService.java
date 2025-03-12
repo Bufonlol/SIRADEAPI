@@ -24,7 +24,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class UsuarioService implements UserDetailsService {
+public class UsuarioService {
 
     @Autowired private PasswordEncoder passwordEncoder;
     @Autowired private UsuarioRepository usuarioRepository;
