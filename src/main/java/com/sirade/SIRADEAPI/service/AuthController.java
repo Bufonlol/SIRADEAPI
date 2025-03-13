@@ -33,6 +33,9 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    /**
+     * Login normal - No permite usuarios con rol PACIENTE
+     */
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@Valid @RequestBody AuthRequest authRequest) {
         try {
@@ -49,6 +52,12 @@ public class AuthController {
             // Buscamos el usuario completo en la BD
             UsuarioDTO usuario = usuarioService.findByEmail(email)
                     .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+
+            // Bloquear acceso a usuarios con rol PACIENTE
+            if (usuario.getRole().equals(UsuarioDTO.RolUsuario.PACIENTE)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(ApiResponse.error("Acceso denegado: Los pacientes deben iniciar sesión en /login-paciente"));
+            }
 
             // Generamos el token JWT
             String jwt = jwtUtil.generateToken(usuario);
@@ -72,6 +81,57 @@ public class AuthController {
         }
     }
 
+    /**
+     * Login exclusivo para PACIENTES
+     */
+    @PostMapping("/login-paciente")
+    public ResponseEntity<ApiResponse> loginPaciente(@Valid @RequestBody AuthRequest authRequest) {
+        try {
+            // Autenticamos al usuario
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            authRequest.getEmail(),
+                            authRequest.getPassword()
+                    )
+            );
+
+            // Extraemos el email autenticado
+            String email = authentication.getName();
+            // Buscamos el usuario completo en la BD
+            UsuarioDTO usuario = usuarioService.findByEmail(email)
+                    .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+
+            // Permitir solo PACIENTES
+            if (!usuario.getRole().equals(UsuarioDTO.RolUsuario.PACIENTE)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(ApiResponse.error("Acceso denegado: Solo los pacientes pueden iniciar sesión aquí."));
+            }
+
+            // Generamos el token JWT
+            String jwt = jwtUtil.generateToken(usuario);
+
+            return ResponseEntity.ok(
+                    ApiResponse.success("Login exitoso", new AuthResponse(
+                            jwt,
+                            usuario.getId(),
+                            usuario.getEmail(),
+                            usuario.getRole().name(),
+                            usuario.getNombreCompleto()
+                    ))
+            );
+
+        } catch (DisabledException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(ApiResponse.error("Usuario inactivo"));
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(ApiResponse.error("Credenciales inválidas"));
+        }
+    }
+
+    /**
+     * Registro de usuarios (forzando rol PACIENTE)
+     */
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> register(@Valid @RequestBody UsuarioDTO usuarioDTO) {
         try {
