@@ -4,6 +4,7 @@ import com.sirade.SIRADEAPI.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -22,6 +23,7 @@ import java.util.List;
 public class SecurityConfig {
 
     @Autowired
+    @Lazy // Rompe la dependencia circular
     private UsuarioService usuarioService;
 
     @Bean
