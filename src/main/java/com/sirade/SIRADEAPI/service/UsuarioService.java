@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -53,7 +52,6 @@ public class UsuarioService implements UserDetailsService {
         }
         usuarioDTO.setPassword(passwordEncoder.encode(usuarioDTO.getPassword()));
 
-        // Validación del hospital si se proporciona
         if (usuarioDTO.getHospitalId() != null) {
             Hospital hospital = hospitalRepository.findById(usuarioDTO.getHospitalId())
                     .orElseThrow(() -> new RuntimeException("Hospital no encontrado"));
@@ -86,10 +84,9 @@ public class UsuarioService implements UserDetailsService {
                 existente.setHospital(null);
             }
 
-            // Solo un usuario con rol ADMIN puede actualizar rol y estado
-            Authentication auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
-            if (auth != null && auth.getAuthorities().stream()
-                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // Solo ADMIN puede actualizar rol y estado
+            if (org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication()
+                    .getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
                 existente.setRole(usuarioDTO.getRole());
                 existente.setStatus(usuarioDTO.getStatus());
             }
@@ -110,6 +107,7 @@ public class UsuarioService implements UserDetailsService {
         return false;
     }
 
+    // Método para recuperar usuario por email
     public Optional<UsuarioDTO> findByEmail(String email) {
         return usuarioRepository.findByEmail(email);
     }

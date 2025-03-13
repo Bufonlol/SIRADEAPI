@@ -36,7 +36,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@Valid @RequestBody AuthRequest authRequest) {
         try {
-            // Realiza la autenticación con el AuthenticationManager
+            // Autenticamos al usuario
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             authRequest.getEmail(),
@@ -44,13 +44,13 @@ public class AuthController {
                     )
             );
 
-            // Obtiene el email del usuario autenticado
+            // Extraemos el email autenticado
             String email = authentication.getName();
-            // Recupera el usuario completo de la base de datos
+            // Buscamos el usuario completo en la BD
             UsuarioDTO usuario = usuarioService.findByEmail(email)
                     .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
-            // Genera el token JWT con la información completa
+            // Generamos el token JWT
             String jwt = jwtUtil.generateToken(usuario);
 
             return ResponseEntity.ok(
@@ -79,7 +79,7 @@ public class AuthController {
                 return ResponseEntity.badRequest()
                         .body(ApiResponse.error("El email ya está registrado"));
             }
-            // Forzar rol PACIENTE y estado ACTIVO para registros públicos
+            // Forzamos el rol PACIENTE y estado ACTIVO
             usuarioDTO.setRole(UsuarioDTO.RolUsuario.PACIENTE);
             usuarioDTO.setStatus(UsuarioDTO.EstadoUsuario.ACTIVO);
 
