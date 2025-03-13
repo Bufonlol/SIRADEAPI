@@ -36,6 +36,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@Valid @RequestBody AuthRequest authRequest) {
         try {
+            // Realiza la autenticación con el AuthenticationManager
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             authRequest.getEmail(),
@@ -43,12 +44,13 @@ public class AuthController {
                     )
             );
 
-            // Obtenemos el email del objeto autenticado (User de Spring Security)
+            // Obtiene el email del usuario autenticado
             String email = authentication.getName();
-            // Buscamos el usuario completo en la base de datos
+            // Recupera el usuario completo de la base de datos
             UsuarioDTO usuario = usuarioService.findByEmail(email)
                     .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
+            // Genera el token JWT con la información completa
             String jwt = jwtUtil.generateToken(usuario);
 
             return ResponseEntity.ok(
@@ -77,7 +79,7 @@ public class AuthController {
                 return ResponseEntity.badRequest()
                         .body(ApiResponse.error("El email ya está registrado"));
             }
-            // Forzar rol PACIENTE para registros públicos
+            // Forzar rol PACIENTE y estado ACTIVO para registros públicos
             usuarioDTO.setRole(UsuarioDTO.RolUsuario.PACIENTE);
             usuarioDTO.setStatus(UsuarioDTO.EstadoUsuario.ACTIVO);
 
