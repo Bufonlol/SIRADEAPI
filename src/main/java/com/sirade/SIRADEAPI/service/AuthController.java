@@ -56,7 +56,7 @@ public class AuthController {
             // Bloquear acceso a usuarios con rol PACIENTE
             if (usuario.getRole().equals(UsuarioDTO.RolUsuario.PACIENTE)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body(ApiResponse.error("Acceso denegado: Los pacientes deben iniciar sesión en /login-paciente"));
+                        .body(ApiResponse.error("Acceso denegado: Los pacientes deben iniciar sesión en la app"));
             }
 
             // Generamos el token JWT
