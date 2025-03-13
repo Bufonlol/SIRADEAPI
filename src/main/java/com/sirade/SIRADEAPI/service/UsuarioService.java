@@ -46,6 +46,11 @@ public class UsuarioService {
         return usuarioRepository.existsByEmail(email);
     }
 
+    public Optional<UsuarioDTO> findByEmail(String email) {
+        return usuarioRepository.findByEmail(email);
+    }
+
+
     public UsuarioDTO guardar(UsuarioDTO usuarioDTO) {
         if (usuarioDTO.getPassword() == null || usuarioDTO.getPassword().isBlank()) {
             throw new IllegalArgumentException("La contraseña es obligatoria");

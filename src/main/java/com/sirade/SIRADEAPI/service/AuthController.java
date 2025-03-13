@@ -14,17 +14,22 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-// 3. AuthController.java (mejorado)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    @Autowired private AuthenticationManager authenticationManager;
-    @Autowired private UsuarioService usuarioService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UsuarioService usuarioService;
+
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -38,16 +43,23 @@ public class AuthController {
                     )
             );
 
-            UsuarioDTO usuario = (UsuarioDTO) authentication.getPrincipal();
+            // Obtenemos el email del objeto autenticado (User de Spring Security)
+            String email = authentication.getName();
+            // Buscamos el usuario completo en la base de datos
+            UsuarioDTO usuario = usuarioService.findByEmail(email)
+                    .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+
             String jwt = jwtUtil.generateToken(usuario);
 
-            return ResponseEntity.ok(ApiResponse.success("Login exitoso", new AuthResponse(
-                    jwt,
-                    usuario.getId(),
-                    usuario.getEmail(),
-                    usuario.getRole().name(),
-                    usuario.getNombreCompleto()
-            )));
+            return ResponseEntity.ok(
+                    ApiResponse.success("Login exitoso", new AuthResponse(
+                            jwt,
+                            usuario.getId(),
+                            usuario.getEmail(),
+                            usuario.getRole().name(),
+                            usuario.getNombreCompleto()
+                    ))
+            );
 
         } catch (DisabledException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -65,7 +77,6 @@ public class AuthController {
                 return ResponseEntity.badRequest()
                         .body(ApiResponse.error("El email ya está registrado"));
             }
-
             // Forzar rol PACIENTE para registros públicos
             usuarioDTO.setRole(UsuarioDTO.RolUsuario.PACIENTE);
             usuarioDTO.setStatus(UsuarioDTO.EstadoUsuario.ACTIVO);
@@ -81,7 +92,6 @@ public class AuthController {
                             nuevoUsuario.getRole().name(),
                             nuevoUsuario.getNombreCompleto()
                     )));
-
         } catch (Exception e) {
             return ResponseEntity.internalServerError()
                     .body(ApiResponse.error("Error en el registro: " + e.getMessage()));
