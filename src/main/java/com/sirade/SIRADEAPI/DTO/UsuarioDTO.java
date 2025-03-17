@@ -135,8 +135,10 @@ public class UsuarioDTO {
         this.hospitalId = hospitalId;
     }
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Transient
     private Long hospitalId;
+
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
