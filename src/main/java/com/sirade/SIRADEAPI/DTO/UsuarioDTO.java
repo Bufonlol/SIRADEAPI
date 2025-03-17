@@ -1,5 +1,6 @@
 package com.sirade.SIRADEAPI.DTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -48,6 +49,7 @@ public class UsuarioDTO {
     @Enumerated(EnumType.STRING)
     private EstadoUsuario status = EstadoUsuario.ACTIVO;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ManyToOne
     @JoinColumn(name = "hospital_id")
     @JsonBackReference // Evita la serialización infinita
