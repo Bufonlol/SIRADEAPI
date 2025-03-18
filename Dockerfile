@@ -9,6 +9,16 @@ RUN mvn clean package -Pprod -DskipTests
 # Etapa de ejecución
 FROM eclipse-temurin:21-jdk
 WORKDIR /app
+
+# Instalar Python en el contenedor
+RUN apt-get update && apt-get install -y python3 && rm -rf /var/lib/apt/lists/*
+
+# Copiar el JAR compilado
 COPY --from=build /app/target/*.jar app.jar
+
+# Si tu script Python no está incluido dentro del JAR, copia también la carpeta o el archivo
+# Ejemplo:
+# COPY python-model/ /app/python-model/
+
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
