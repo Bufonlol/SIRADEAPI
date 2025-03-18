@@ -9,7 +9,7 @@ RUN mvn clean package -Pprod -DskipTests
 FROM eclipse-temurin:21-jdk
 WORKDIR /app
 
-# Instalar Python en el contenedor
+# Instalar Python y pip en el contenedor
 RUN apt-get update && apt-get install -y python3 python3-pip && rm -rf /var/lib/apt/lists/*
 
 # Copiar requirements.txt e instalar dependencias Python
