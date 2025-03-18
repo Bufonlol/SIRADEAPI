@@ -24,7 +24,7 @@ public class AudioController {
             file.transferTo(audioFile);
 
             // Ejecutar el script de Python
-            ProcessBuilder processBuilder = new ProcessBuilder("python3", "ruta/a/python-model/script.py", audioFile.getAbsolutePath());
+            ProcessBuilder processBuilder = new ProcessBuilder("python3", "src/main/java/com/sirade/SIRADEAPI/python_model/script.py", audioFile.getAbsolutePath());
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
 
