@@ -27,6 +27,7 @@ RUN python3 -m venv /app/venv \
     && /app/venv/bin/pip install --only-binary=:all: -r /app/requirements.txt
 
 # Copiar el JAR compilado
+
 COPY --from=build /app/target/*.jar app.jar
 
 # Copiar archivos del modelo y script Python
