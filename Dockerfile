@@ -14,10 +14,13 @@ RUN apt-get update && apt-get install -y \
     python3 python3-pip python3-venv \
     && rm -rf /var/lib/apt/lists/*
 
+# Establecer variable de entorno para evitar el error de pkgutil.ImpImporter en Python 3.12
+ENV SETUPTOOLS_USE_DISTUTILS=stdlib
+
 # Copiar requirements.txt antes de la instalación
 COPY requirements.txt /app/requirements.txt
 
-# Crear un entorno virtual, actualizar herramientas de instalación e instalar dependencias
+# Crear un entorno virtual, actualizar pip, setuptools y wheel, e instalar dependencias
 RUN python3 -m venv /app/venv \
     && /app/venv/bin/pip install --upgrade pip \
     && /app/venv/bin/pip install "setuptools>=68.0.0" "wheel>=0.38.4" \
@@ -30,8 +33,5 @@ COPY --from=build /app/target/*.jar app.jar
 COPY src/main/java/com/sirade/SIRADEAPI/python_model/*.py /app/
 COPY src/main/java/com/sirade/SIRADEAPI/python_model/*.pkl /app/
 
-# Exponer el puerto de la aplicación
 EXPOSE 8080
-
-# Configurar el punto de entrada
 ENTRYPOINT ["java", "-jar", "app.jar"]
