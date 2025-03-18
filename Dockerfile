@@ -14,17 +14,17 @@ RUN apt-get update && apt-get install -y \
     python3 python3-pip python3-venv \
     && rm -rf /var/lib/apt/lists/*
 
-# Establecer variable de entorno para evitar el error de pkgutil.ImpImporter en Python 3.12
+# Establecer variable de entorno para evitar problemas con setuptools en Python 3.12
 ENV SETUPTOOLS_USE_DISTUTILS=stdlib
 
 # Copiar requirements.txt antes de la instalación
 COPY requirements.txt /app/requirements.txt
 
-# Crear un entorno virtual, actualizar pip, setuptools y wheel, e instalar dependencias
+# Crear un entorno virtual, actualizar pip, setuptools y wheel, e instalar dependencias (solo binarios)
 RUN python3 -m venv /app/venv \
     && /app/venv/bin/pip install --upgrade pip \
     && /app/venv/bin/pip install "setuptools>=68.0.0" "wheel>=0.38.4" \
-    && /app/venv/bin/pip install -r /app/requirements.txt
+    && /app/venv/bin/pip install --only-binary=:all: -r /app/requirements.txt
 
 # Copiar el JAR compilado
 COPY --from=build /app/target/*.jar app.jar
