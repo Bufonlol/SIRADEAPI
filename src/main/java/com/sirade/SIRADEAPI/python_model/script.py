@@ -5,13 +5,13 @@ import joblib
 import librosa
 
 def extraer_caracteristicas(ruta_audio, n_mfcc=13):
-    # Cargar el archivo de audio y extraer MFCCs
+    # Cargar el audio y extraer los MFCCs
     y, sr = librosa.load(ruta_audio, sr=None)
     mfccs = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=n_mfcc)
     return np.mean(mfccs, axis=1)
 
 def predecir_audio(ruta_audio):
-    # Cargar el modelo, el escalador y el encoder
+    # Cargar modelo, escalador y encoder
     modelo = joblib.load("modelo_svc.pkl")
     scaler = joblib.load("scaler.pkl")
     encoder = joblib.load("encoder.pkl")
@@ -22,7 +22,7 @@ def predecir_audio(ruta_audio):
     prediccion = modelo.predict(caracteristicas)
     probabilidad = modelo.predict_proba(caracteristicas)[0]
     etiqueta = encoder.inverse_transform(prediccion)[0]
-    probabilidad_etiqueta = probabilidad[prediccion[0]]  # Probabilidad asociada a la predicción
+    probabilidad_etiqueta = probabilidad[prediccion[0]]  # Probabilidad asociada
 
     # Imprimir el resultado en el formato esperado: "etiqueta,probabilidad"
     print(f"{etiqueta},{probabilidad_etiqueta}", flush=True)

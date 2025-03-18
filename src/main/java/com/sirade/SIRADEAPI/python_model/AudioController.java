@@ -1,4 +1,4 @@
-package com.sirade.SIRADEAPI.controller;
+package com.sirade.SIRADEAPI.python_model;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.*;
@@ -23,8 +23,9 @@ public class AudioController {
             File audioFile = new File(System.getProperty("java.io.tmpdir") + "/" + file.getOriginalFilename());
             file.transferTo(audioFile);
 
-            // Ejecutar el script de Python
-            ProcessBuilder processBuilder = new ProcessBuilder("python3", "src/main/java/com/sirade/SIRADEAPI/python_model/script.py", audioFile.getAbsolutePath());
+            // Actualiza la ruta al script Python según dónde se encuentre en el entorno de ejecución.
+            // Por ejemplo, si se copia en /app/python_model/script.py:
+            ProcessBuilder processBuilder = new ProcessBuilder("python3", "script.py", audioFile.getAbsolutePath());
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
 
@@ -32,7 +33,6 @@ public class AudioController {
             String line;
             String lastLine = "";
             while ((line = reader.readLine()) != null) {
-                // Capturamos la última línea no vacía
                 if (!line.trim().isEmpty()) {
                     lastLine = line.trim();
                 }
