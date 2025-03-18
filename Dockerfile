@@ -9,19 +9,19 @@ RUN mvn clean package -Pprod -DskipTests
 FROM eclipse-temurin:21-jdk
 WORKDIR /app
 
-# Instalar Python y herramientas necesarias
+# Instalar Python 3.11 y herramientas necesarias
 RUN apt-get update && apt-get install -y \
-    python3 python3-pip python3-venv \
+    python3.11 python3.11-venv python3.11-distutils \
     && rm -rf /var/lib/apt/lists/*
 
-# Establecer variable de entorno para evitar problemas con setuptools en Python 3.12
+# (Opcional) Establecer variable de entorno para setuptools, aunque con Python 3.11 suele funcionar sin problemas.
 ENV SETUPTOOLS_USE_DISTUTILS=stdlib
 
-# Copiar requirements.txt antes de la instalación
+# Copiar requirements.txt
 COPY requirements.txt /app/requirements.txt
 
-# Crear un entorno virtual, actualizar pip, setuptools y wheel, e instalar dependencias (solo binarios)
-RUN python3 -m venv /app/venv \
+# Crear un entorno virtual usando python3.11, actualizar pip, setuptools y wheel, e instalar dependencias (solo binarios)
+RUN python3.11 -m venv /app/venv \
     && /app/venv/bin/pip install --upgrade pip \
     && /app/venv/bin/pip install "setuptools>=68.0.0" "wheel>=0.38.4" \
     && /app/venv/bin/pip install --only-binary=:all: -r /app/requirements.txt
