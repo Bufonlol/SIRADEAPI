@@ -16,10 +16,11 @@ RUN apt-get update && apt-get install -y python3 && rm -rf /var/lib/apt/lists/*
 # Copiar el JAR compilado
 COPY --from=build /app/target/*.jar app.jar
 # ...
-COPY python_model/script.py /app/script.py
-COPY python_model/encoder.pkl /app/encoder.pkl
-COPY python_model/modelo_svc.pkl /app/modelo_svc.pkl
-COPY python_model/scaler.pkl /app/scaler.pkl
+COPY src/main/java/com/sirade/SIRADEAPI/python_model/script.py /app/script.py
+COPY src/main/java/com/sirade/SIRADEAPI/python_model/encoder.pkl /app/encoder.pkl
+COPY src/main/java/com/sirade/SIRADEAPI/python_model/modelo_svc.pkl /app/modelo_svc.pkl
+COPY src/main/java/com/sirade/SIRADEAPI/python_model/scaler.pkl /app/scaler.pkl
+
 # ...
 
 
