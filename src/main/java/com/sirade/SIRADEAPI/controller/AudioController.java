@@ -30,17 +30,22 @@ public class AudioController {
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
-            StringBuilder result = new StringBuilder();
-
+            String lastLine = "";
             while ((line = reader.readLine()) != null) {
-                result.append(line);
+                // Capturamos la última línea no vacía
+                if (!line.trim().isEmpty()) {
+                    lastLine = line.trim();
+                }
             }
 
             process.waitFor();
             audioFile.delete();  // Eliminar el archivo temporal
 
             // Se espera que el script devuelva: "etiqueta,probabilidad"
-            String[] salida = result.toString().split(",");
+            String[] salida = lastLine.split(",");
+            if (salida.length < 2) {
+                throw new Exception("Formato de salida incorrecto: " + lastLine);
+            }
             String etiqueta = salida[0].trim();
             String probabilidad = salida[1].trim();
 
