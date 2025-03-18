@@ -10,11 +10,12 @@ FROM eclipse-temurin:21-jdk
 WORKDIR /app
 
 # Instalar Python y pip en el contenedor
-RUN apt-get update && apt-get install -y python3 python3-pip && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y python3 python3-pip python3-venv && rm -rf /var/lib/apt/lists/*
 
-# Copiar requirements.txt e instalar dependencias Python
-COPY requirements.txt /app/requirements.txt
-RUN pip3 install -r /app/requirements.txt
+# Crear un entorno virtual y activar
+RUN python3 -m venv /app/venv \
+    && /app/venv/bin/pip install --upgrade pip \
+    && /app/venv/bin/pip install -r /app/requirements.txt
 
 # Copiar el JAR compilado
 COPY --from=build /app/target/*.jar app.jar
