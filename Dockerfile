@@ -13,7 +13,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y python3 python3-pip && rm -rf /var/lib/apt/lists/*
 
 # Copiar requirements.txt e instalar dependencias Python
-COPY src/main/java/com/sirade/SIRADEAPI/requirements.txt /app/requirements.txt
+COPY requirements.txt /app/requirements.txt
 RUN pip3 install -r /app/requirements.txt
 
 # Copiar el JAR compilado
