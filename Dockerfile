@@ -9,9 +9,9 @@ RUN mvn clean package -Pprod -DskipTests
 FROM eclipse-temurin:21-jdk
 WORKDIR /app
 
-# Instalar Python y herramientas necesarias (se instalará la versión predeterminada, generalmente Python 3.9)
+# Instalar Python y herramientas necesarias (se omite python3-distutils)
 RUN apt-get update && apt-get install -y \
-    python3 python3-venv python3-distutils \
+    python3 python3-venv \
     && rm -rf /var/lib/apt/lists/*
 
 # (Opcional) Establecer variable de entorno para que setuptools use la implementación estándar de distutils
