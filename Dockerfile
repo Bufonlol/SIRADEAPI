@@ -11,7 +11,9 @@ FROM eclipse-temurin:21-jdk
 WORKDIR /app
 
 # Instalar Python en el contenedor
-RUN apt-get update && apt-get install -y python3 && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y python3 python3-pip && rm -rf /var/lib/apt/lists/*
+COPY requirements.txt /app/requirements.txt
+RUN pip3 install -r src/main/java/com/sirade/SIRADEAPI/requirements.txt
 
 # Copiar el JAR compilado
 COPY --from=build /app/target/*.jar app.jar
