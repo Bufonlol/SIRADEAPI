@@ -6,7 +6,7 @@ RUN mvn dependency:go-offline
 COPY . .
 RUN mvn clean package -Pprod -DskipTests
 
-# Etapa de ejecución
+# tapa de ejecución
 FROM eclipse-temurin:21-jdk
 WORKDIR /app
 
