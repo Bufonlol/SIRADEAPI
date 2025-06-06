@@ -14,10 +14,12 @@ public class CorsConfig implements WebMvcConfigurer {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("*")
+                        .allowedOrigins("https://id-preview--5341bf68-42ab-4af9-ba52-dd9e41fde1ae.lovable.app")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*");
+                        .allowedHeaders("*")
+                        .allowCredentials(true); // HABILITAR ENVÍO DE COOKIES O HEADERS COMO AUTH
             }
         };
     }
 }
+
