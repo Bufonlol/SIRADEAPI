@@ -14,10 +14,9 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins(
-                                "https://id-preview--5341bf68-42ab-4af9-ba52-dd9e41fde1ae.lovable.app",
-                                "https://id-preview--2559bef9-c5b5-4b38-b540-94f2dca4981b.lovable.app",
-                                "https://2559bef9-c5b5-4b38-b540-94f2dca4981b.lovableproject.com" // 🔧 NUEVA URL
+                        .allowedOriginPatterns(
+                                "https://*.lovable.app",
+                                "https://*.lovableproject.com"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
