@@ -46,17 +46,14 @@ public class SecurityConfig {
         return authProvider;
     }
 
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-
-        // Permitir subdominios de lovable.app y lovableproject.com
         configuration.setAllowedOriginPatterns(List.of(
-                "https://*.lovable.app",
-                "https://*.lovableproject.com"
+                "https://id-preview--*.lovable.app",
+                "https://*.lovableproject.com",
+                "http://localhost:4200"
         ));
-
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
@@ -65,7 +62,6 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 
 
     @Bean
