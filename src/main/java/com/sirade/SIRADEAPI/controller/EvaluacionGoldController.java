@@ -15,7 +15,8 @@ import java.util.Optional;
 @RequestMapping("/api/evaluacion-gold")
 public class EvaluacionGoldController {
 
-    private UsuarioRepository usuarioRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;  // <-- falta esta inyección
 
     @Autowired
     private EvaluacionGoldService evaluacionGoldService;
@@ -23,7 +24,7 @@ public class EvaluacionGoldController {
     @PostMapping
     @PreAuthorize("hasRole('PACIENTE')")
     public EvaluacionGold evaluarYGuardar(@RequestBody EvaluacionGoldDTO dto, Principal principal) {
-        Long userId = getUserIdFromPrincipal(principal); // método auxiliar que debes implementar
+        Long userId = getUserIdFromPrincipal(principal);
         return evaluacionGoldService.guardarEvaluacion(userId, dto);
     }
 
@@ -35,6 +36,9 @@ public class EvaluacionGoldController {
     }
 
     private Long getUserIdFromPrincipal(Principal principal) {
+        if (principal == null) {
+            throw new RuntimeException("Usuario no autenticado");
+        }
         String email = principal.getName();
         return usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con email: " + email))
