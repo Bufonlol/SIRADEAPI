@@ -5,10 +5,12 @@ import com.sirade.SIRADEAPI.DTO.EvaluacionGold;
 import com.sirade.SIRADEAPI.repository.UsuarioRepository;
 import com.sirade.SIRADEAPI.service.EvaluacionGoldService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -27,6 +29,14 @@ public class EvaluacionGoldController {
         Long userId = getUserIdFromPrincipal(principal);
         return evaluacionGoldService.guardarEvaluacion(userId, dto);
     }
+
+    @GetMapping("/status/{userId}")
+    @PreAuthorize("hasRole('PACIENTE')")
+    public ResponseEntity<?> checkEvaluacionStatus(@PathVariable Long userId) {
+        boolean completado = evaluacionGoldService.obtenerEvaluacionPorUsuario(userId).isPresent();
+        return ResponseEntity.ok().body(Map.of("completed", completado));
+    }
+
 
     @GetMapping
     @PreAuthorize("hasRole('PACIENTE')")
