@@ -36,6 +36,9 @@ public class UsuarioDTO {
     @Column(unique = true)
     private String email;
 
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private EvaluacionGold evaluacionGold;
+
     @NotBlank
     private String password;
 
