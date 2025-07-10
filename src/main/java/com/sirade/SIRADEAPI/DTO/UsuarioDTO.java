@@ -25,11 +25,107 @@ public class UsuarioDTO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public Boolean getEvaluacionGoldCompleta() {
+        return evaluacionGoldCompleta;
+    }
+
+    public void setEvaluacionGoldCompleta(Boolean evaluacionGoldCompleta) {
+        this.evaluacionGoldCompleta = evaluacionGoldCompleta;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public EvaluacionGold getEvaluacionGold() {
+        return evaluacionGold;
+    }
+
+    public void setEvaluacionGold(EvaluacionGold evaluacionGold) {
+        this.evaluacionGold = evaluacionGold;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public RolUsuario getRole() {
+        return role;
+    }
+
+    public void setRole(RolUsuario role) {
+        this.role = role;
+    }
+
+    public String getSpecialty() {
+        return specialty;
+    }
+
+    public void setSpecialty(String specialty) {
+        this.specialty = specialty;
+    }
+
+    public EstadoUsuario getStatus() {
+        return status;
+    }
+
+    public void setStatus(EstadoUsuario status) {
+        this.status = status;
+    }
+
+    public Hospital getHospital() {
+        return hospital;
+    }
+
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
+    }
+
+    public Long getHospitalId() {
+        return hospitalId;
+    }
+
+    public void setHospitalId(Long hospitalId) {
+        this.hospitalId = hospitalId;
+    }
+
     @NotBlank
     private String firstName;
 
     @Column(name = "evaluacion_gold_completa")
-    private boolean evaluacionGoldCompleta = false;
+    private Boolean evaluacionGoldCompleta = false;  // Cambiado a Boolean con valor por defecto
 
     @NotBlank
     private String lastName;
@@ -61,90 +157,11 @@ public class UsuarioDTO {
     @JsonBackReference // Evita la serialización infinita
     private Hospital hospital;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public @NotBlank String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(@NotBlank String firstName) {
-        this.firstName = firstName;
-    }
-
-    public @NotBlank String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(@NotBlank String lastName) {
-        this.lastName = lastName;
-    }
-
-    public @Email @NotBlank String getEmail() {
-        return email;
-    }
-
-    public void setEmail(@Email @NotBlank String email) {
-        this.email = email;
-    }
-
-    public @NotBlank String getPassword() {
-        return password;
-    }
-
-    public void setPassword(@NotBlank String password) {
-        this.password = password;
-    }
-
-    public @NotNull RolUsuario getRole() {
-        return role;
-    }
-
-    public void setRole(@NotNull RolUsuario role) {
-        this.role = role;
-    }
-
-    public String getSpecialty() {
-        return specialty;
-    }
-
-    public void setSpecialty(String specialty) {
-        this.specialty = specialty;
-    }
-
-    public @NotNull EstadoUsuario getStatus() {
-        return status;
-    }
-
-    public void setStatus(@NotNull EstadoUsuario status) {
-        this.status = status;
-    }
-
-    public Hospital getHospital() {
-        return hospital;
-    }
-
-    public void setHospital(Hospital hospital) {
-        this.hospital = hospital;
-    }
-
-    public Long getHospitalId() {
-        return hospitalId;
-    }
-
-    public void setHospitalId(Long hospitalId) {
-        this.hospitalId = hospitalId;
-    }
-
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Transient
     private Long hospitalId;
 
+    // Getters y setters omitidos para brevedad (puedes mantenerlos como están)
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
@@ -159,5 +176,6 @@ public class UsuarioDTO {
     private void prePersist() {
         if (role == null) role = RolUsuario.PACIENTE;
         if (status == null) status = EstadoUsuario.ACTIVO;
+        if (evaluacionGoldCompleta == null) evaluacionGoldCompleta = false;  // Por seguridad
     }
 }
