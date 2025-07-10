@@ -40,7 +40,8 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // rutas públicas (login, registro, etc)
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/hospitales").permitAll() // ✅ PERMITIR HOSPITALES SIN TOKEN
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
