@@ -1,5 +1,6 @@
 package com.sirade.SIRADEAPI.DTO;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,5 +26,7 @@ public class EvaluacionGold {
 
     @OneToOne
     @JoinColumn(name = "usuario_id", unique = true)
+    @JsonBackReference
     private UsuarioDTO usuario;
+
 }

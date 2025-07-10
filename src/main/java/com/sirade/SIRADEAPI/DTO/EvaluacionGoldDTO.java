@@ -1,7 +1,8 @@
 package com.sirade.SIRADEAPI.DTO;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
-import jakarta.validation.constraints.*;
 
 @Data
 public class EvaluacionGoldDTO {

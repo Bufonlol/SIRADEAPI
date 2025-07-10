@@ -28,6 +28,9 @@ public class UsuarioDTO {
     @NotBlank
     private String firstName;
 
+    @Column(name = "evaluacion_gold_completa")
+    private boolean evaluacionGoldCompleta = false;
+
     @NotBlank
     private String lastName;
 
