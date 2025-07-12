@@ -34,7 +34,7 @@ public class UsuarioController {
 
     @GetMapping("/doctores/hospital/{hospitalId}")
     public List<UsuarioDTO> listarDoctoresPorHospital(@PathVariable Long hospitalId) {
-        return usuarioRepository.findByHospitalIdAndRole(hospitalId, UsuarioDTO.RolUsuario.DOCTOR);
+        return usuarioRepository.findByHospital_IdAndRole(hospitalId, UsuarioDTO.RolUsuario.DOCTOR);
     }
 
 
