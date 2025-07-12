@@ -1,6 +1,7 @@
 package com.sirade.SIRADEAPI.controller;
 
 import com.sirade.SIRADEAPI.DTO.UsuarioDTO;
+import com.sirade.SIRADEAPI.repository.UsuarioRepository;
 import com.sirade.SIRADEAPI.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     // Obtener todos los usuarios (solo ADMIN)
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -27,6 +31,12 @@ public class UsuarioController {
         List<UsuarioDTO> usuarios = usuarioService.listarTodos();
         return ResponseEntity.ok(usuarios);
     }
+
+    @GetMapping("/doctores/hospital/{hospitalId}")
+    public List<UsuarioDTO> listarDoctoresPorHospital(@PathVariable Long hospitalId) {
+        return usuarioRepository.findByHospitalIdAndRole(hospitalId, UsuarioDTO.RolUsuario.DOCTOR);
+    }
+
 
     // Obtener usuarios paginados (solo ADMIN)
     @GetMapping("/paged")

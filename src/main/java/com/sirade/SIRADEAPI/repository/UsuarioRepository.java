@@ -14,4 +14,7 @@ public interface UsuarioRepository extends JpaRepository<UsuarioDTO, Long> {
     @Query("SELECT u FROM UsuarioDTO u WHERE u.email = ?1 AND u.status = 'ACTIVO'")
     Optional<UsuarioDTO> findByEmailAndStatus(String email, UsuarioDTO.EstadoUsuario status);
 
+    List<UsuarioDTO> findByHospitalIdAndRole(Long hospitalId, UsuarioDTO.RolUsuario role);
+
+
 }
