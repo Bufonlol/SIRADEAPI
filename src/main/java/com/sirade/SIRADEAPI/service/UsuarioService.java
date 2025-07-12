@@ -126,4 +126,9 @@ public class UsuarioService implements UserDetailsService {
                 usuario.getPassword(),
                 usuario.getAuthorities());
     }
+
+    public List<UsuarioDTO> obtenerDoctores() {
+        return usuarioRepository.findByRole(UsuarioDTO.RolUsuario.DOCTOR);
+    }
+
 }

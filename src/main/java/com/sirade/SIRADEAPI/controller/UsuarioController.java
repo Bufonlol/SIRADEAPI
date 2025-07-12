@@ -54,6 +54,12 @@ public class UsuarioController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/doctores")
+    public List<UsuarioDTO> obtenerDoctores() {
+        return usuarioService.obtenerDoctores();
+    }
+
+
     // Crear usuario (abierto o según política de seguridad)
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
