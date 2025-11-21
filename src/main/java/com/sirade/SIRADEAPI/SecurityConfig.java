@@ -66,7 +66,8 @@ public class SecurityConfig {
         configuration.setAllowedOriginPatterns(List.of(
                 "https://id-preview--*.lovable.app",
                 "https://*.lovableproject.com",
-                "http://localhost:4200"
+                "http://localhost:4200",
+                "https://sirade-health-helper.lovable.app"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
